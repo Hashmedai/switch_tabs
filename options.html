@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Switch Tab Option</title>
+
+  </head>
+  <body>
+    <br>
+    <label>
+      <input type="checkbox" id="switchTab" />
+      Switch between tabs timer
+    </label>
+    <select id="switchTabTimer">
+      <option value="10">10 secs</option>
+      <option value="15">15 secs</option>
+      <option value="20">20 secs</option>
+      <option value="25">25 secs</option>
+      <option value="30">30 secs</option>
+    </select>
+    <br>
+    <br>
+    <label>
+      <input type="checkbox" id="refreshTab" />
+      Reload tab timer
+    </label>
+    <select id="refreshTabTimer">
+      <option value="1">1 Min</option>
+      <option value="5">5 Min</option>
+      <option value="10">10 Min</option>
+      <option value="15">15 Min</option>
+      <option value="30">30 Min</option>
+      <option value="60">60 Min</option>
+    </select>
+    <br>
+    <br>
+    <label>
+      <input type="checkbox" id="fullScreen" />
+      Set window in FullScreen
+    </label>
+    <label>
+      <input type="checkbox" id="tabReload" />
+      Remember tab original url
+    </label>
+    <br>
+    <br>
+    <div id="status"></div>
+    <button id="save">Save</button>
+
+    <script src="js/options.js"></script>
+  </body>
+</html><!DOCTYPE html>
