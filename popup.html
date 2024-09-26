@@ -8,7 +8,7 @@
           height: 100px;
           margin: 0;
           padding: 0;
-          background-color: rgb(127, 205, 224);
+          background-color: rgb(149, 185, 233);
       }
       h1 {
           margin: 0;
@@ -17,28 +17,38 @@
       .Parameter {
         width:200px;
         text-align:left;
-        vertical-align:bottom;
+        vertical-align:top;
       }
       .CheckBox {
         width:100px;
         text-align:center;
-        vertical-align:bottom;  
+        vertical-align:middle;  
+        border-radius: 10px;
       }
       .List {
         width:100px;
-        text-align:right;
-        vertical-align:bottom;  
+        text-align:center;
+        vertical-align:middle;  
       }
-      table, tr, th {
-        border: 1px solid black;
-        border-collapse: collapse;
+      .Select{
+        border-radius: 5px;
+      }
+      .table {
+        margin: 5px;
+      }
+      .tr, th {
+        border: 2px solid black;
+        border-radius: 10px;
+        border-style: outset;
       }
       .button {
         text-align:right;
+        margin: 5px;
       }
   </style>
   </head>
   <body>
+    <br>
     <table>
       <tr>
         <th class="Parameter">Activate Switch Tabs</th>
@@ -47,7 +57,7 @@
       <tr>
         <th class="Parameter">Switch Tab timer</th>
         <th class="List">
-          <select id="switchTabTimer">
+          <select class="Select" id="switchTabTimer">
             <option value="10">10 secs</option>
             <option value="15">15 secs</option>
             <option value="20">20 secs</option>
@@ -63,7 +73,7 @@
       <tr>
         <th class="Parameter">Refresh Tab timer</th>
         <th class="List">
-          <select id="refreshTabTimer">
+          <select class="Select" id="refreshTabTimer">
             <option value="1">1 Min</option>
             <option value="5">5 Min</option>
             <option value="10">10 Min</option>
@@ -85,5 +95,6 @@
     <p class="button"><button id="save">Save</button></p>
     <div id="status"></div>
     <script src="js/options.js"></script>
+    <br>
   </body>
 </html><!DOCTYPE html>
