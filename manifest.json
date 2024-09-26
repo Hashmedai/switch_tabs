@@ -2,9 +2,9 @@
 "update_url": "https://clients2.google.com/service/update2/crx",
 
 	"manifest_version": 3,
- 	"name": "Switch Tabs",
- 	"description": "Defaut Every 20 secondes : Switch to next tab, refresh tab every 10 minutes",
- 	"version": "3.3",
+ 	"name": "Tabs Refresh Switch",
+ 	"description": "Switch between tabs every x seconds,Reload tabs every x minutes, Put browser in fullscreen, Reload startup pages",
+ 	"version": "1.1",
  	"icons": { 
   		"16" : "img/16x16.png",
 		"32" : "img/32x32.png",
