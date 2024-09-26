@@ -1,5 +1,4 @@
-# switch_tabs
-
+# Tabs Refresh Switch
 Addons for chrome
 
 Used to :
