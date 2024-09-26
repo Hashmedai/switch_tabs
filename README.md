@@ -7,5 +7,3 @@ Used to :
 - Reload tabs every x minutes
 - Put browser in fullscreen
 - Reload original URLs if webpage redirected or in error
-
-Installer l'addons en activant les options dev des addons et en chargeant "une extension non empactée"
