@@ -1,6 +1,4 @@
 {
-"update_url": "https://clients2.google.com/service/update2/crx",
-
 	"manifest_version": 3,
  	"name": "Tabs Refresh Switch",
  	"description": "Switch between tabs every x seconds,Reload tabs every x minutes, Put browser in fullscreen, Reload startup pages",
