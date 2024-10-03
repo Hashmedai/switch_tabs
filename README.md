@@ -6,3 +6,5 @@ Used to :
 - Reload tabs every x minutes
 - Put browser in fullscreen
 - Reload original URLs if webpage redirected or in error
+
+Paused while config pages open
