@@ -8,7 +8,7 @@
           height: 100px;
           margin: 0;
           padding: 0;
-          background-color: rgb(149, 185, 233);
+          background-color: rgb(220, 221, 223);
       }
       h1 {
           margin: 0;
@@ -41,6 +41,10 @@
         border-radius: 10px;
         border-style: outset;
       }
+      .thEmpty{
+        border: 0px;
+        height: 10px;
+      }
       .button {
         text-align:right;
         margin: 5px;
@@ -51,13 +55,10 @@
     <br>
     <table>
       <tr>
-        <th class="Parameter">Activate Switch Tabs</th>
-        <th class="CheckBox"><input type="checkbox" id="switchTab" /></th>
-      </tr>
-      <tr>
         <th class="Parameter">Switch Tab timer</th>
         <th class="List">
           <select class="Select" id="switchTabTimer">
+            <option value="5">5 secs</option>
             <option value="10">10 secs</option>
             <option value="15">15 secs</option>
             <option value="20">20 secs</option>
@@ -66,6 +67,19 @@
           </select>
         </th>
       </tr>
+      <tr>
+        <th class="Parameter">Activate Switch Tabs</th>
+        <th class="CheckBox"><input type="checkbox" id="switchTab" /></th>
+      </tr>
+      <tr>
+        <th class="Parameter">Activate FullScreen</th>
+        <th class="CheckBox"><input type="checkbox" id="fullScreen" /></th>
+      </tr>
+      <tr>
+        <th class="Parameter">Remember Tab URLs</th>
+        <th class="CheckBox"><input type="checkbox" id="tabReload" /></th>
+      </tr>
+      <tr><th class="thEmpty">  </th></tr>
       <tr>
         <th class="Parameter">Activate Tab Refresh</th>
         <th class="CheckBox"><input type="checkbox" id="refreshTab" /></th>
@@ -83,18 +97,11 @@
           </select>
         </th>
       </tr>
-      <tr>
-        <th class="Parameter">Activate FullScreen</th>
-        <th class="CheckBox"><input type="checkbox" id="fullScreen" /></th>
-      </tr>
-      <tr>
-        <th class="Parameter">Remember Tab URLs</th>
-        <th class="CheckBox"><input type="checkbox" id="tabReload" /></th>
-      </tr>
     </table>
     <p class="button"><button id="save">Save</button></p>
     <div id="status"></div>
     <script src="js/options.js"></script>
     <br>
+    <input type="hidden" id="pauseOnConfig"  value="0">
   </body>
 </html><!DOCTYPE html>

@@ -4,19 +4,30 @@
     <title>Switch Tab Option</title>
 
   </head>
-  <body>
+  <body onload="myFunction()">
     <br>
     <label>
       <input type="checkbox" id="switchTab" />
       Switch between tabs timer
     </label>
     <select id="switchTabTimer">
+      <option value="5">5 secs</option>
       <option value="10">10 secs</option>
       <option value="15">15 secs</option>
       <option value="20">20 secs</option>
       <option value="25">25 secs</option>
       <option value="30">30 secs</option>
     </select>
+    <br>
+    <label>
+      <input type="checkbox" id="fullScreen" />
+      Set window in FullScreen
+    </label>
+    <br>
+    <label>
+      <input type="checkbox" id="tabReload" />
+      Remember tab original url
+    </label>
     <br>
     <br>
     <label>
@@ -33,19 +44,10 @@
     </select>
     <br>
     <br>
-    <label>
-      <input type="checkbox" id="fullScreen" />
-      Set window in FullScreen
-    </label>
-    <label>
-      <input type="checkbox" id="tabReload" />
-      Remember tab original url
-    </label>
-    <br>
-    <br>
+    <input type="hidden" id="pauseOnConfig" name="pauseOnConfig" value=0>
     <div id="status"></div>
+    <br>
     <button id="save">Save</button>
-
     <script src="js/options.js"></script>
   </body>
 </html><!DOCTYPE html>
