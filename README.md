@@ -1,5 +1,5 @@
 # Tabs Refresh Switch
-Addons for chrome
+Addons for chrome/Edge
 
 Used to :
 - Switch between tabs every x seconds
