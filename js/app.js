@@ -2,7 +2,7 @@ var cptRefreshCycle = 1
 //Switch between tab timer in seconds
 var switchTabTimer = 20
 // Activate/deactivate switchTab
-var switchTab = ""
+var switchTab = false
 // Reload timer in minutes
 var refreshTabTimer = 10
 // Activate/deactivate refresh
@@ -10,7 +10,9 @@ var refreshTab = ""
 // Activate/deactivate Fullscreen
 var fullScreen = false
 // Activate/Deactivate Tab URLs memory
-var tabReload = true
+var tabReload = false
+// Pause while config panel actif
+var pauseOnConfig = 0
 
 var tabsUrl = []
 var tabsTitle = []
@@ -26,12 +28,25 @@ refreshTabTimer = refreshTabTimer*1000*60
 chrome.runtime.onStartup.addListener( () => {
     console.log(`onStartup()`);
 });
-
+// Listener to pause switching tabs while configuring settings in popup.html
+chrome.runtime.onMessage.addListener(
+	function (message, sender, sendResponse) {
+		if (message === 'stopSwitching') {
+			setPauseOnConfig(1)
+		}
+		else{
+			setPauseOnConfig(0)
+		}
+	}
+);
+function setPauseOnConfig(value){
+	pauseOnConfig = value
+}
 function updateTimers () {
 
 	// Setup timers value from extension configuration
 	chrome.storage.local.get(
-		{ switchTabTimer: '20', switchTab: true ,refreshTabTimer: '10', refreshTab: true,fullScreen: false, tabReload: true },
+		{ switchTabTimer: '20', switchTab: false ,refreshTabTimer: '10', refreshTab: false,fullScreen: false, tabReload: false },
 		(items) => {
 			fullScreen = items.fullScreen
 			tabReload = items.tabReload
@@ -46,63 +61,67 @@ function updateTimers () {
 			refreshTabTimer = refreshTabTimer*1000*60
 		}
 	)
+	//console.log("Update timers : "+pauseOnConfig);
 }
-
 function switchRefreshTabs () {
 	// Debug timer between reload part 1
 	var currentdate = new Date() 
 	
 	datetime = "Last Sync: " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds()
-	// Force full screen after page reload
-	if(fullScreen)chrome.windows.update(chrome.windows.WINDOW_ID_CURRENT,{state: 'fullscreen'})
+	
+	// Do not switch if settings windows open
+	if (pauseOnConfig==0){
+		// Force full screen after page reload
+		if(fullScreen)chrome.windows.update(chrome.windows.WINDOW_ID_CURRENT,{state: 'fullscreen'})
 
-	chrome.tabs.query({active: true}, function(tabs) {
-		var tabIndex = tabs[0].index
-		chrome.tabs.query({}, function(tabs) {
-			var tabsNumber = tabs.length
-			var tabToOpen = tabIndex + 1
-			var tabToRefresh = tabIndex
-			var refreshCycleCalc = 0
+		chrome.tabs.query({active: true}, function(tabs) {
+			var tabIndex = tabs[0].index
+			chrome.tabs.query({}, function(tabs) {
+				var tabsNumber = tabs.length
+				var tabToOpen = tabIndex + 1
+				var tabToRefresh = tabIndex
+				var refreshCycleCalc = 0
 
-			if (tabToOpen >= tabsNumber) {
-				tabToOpen = 0
-			}
-			
-			// Refresh des tabs tous les refreshTabTimer (en miliseconde)
-			if(switchTab)refreshCycleCalc = refreshTabTimer/(cptRefreshCycle*switchTabTimer*tabsNumber)
-			else refreshCycleCalc = refreshTabTimer/(cptRefreshCycle*switchTabTimer)
-			
-			
-			if (!tabReload){
-				// Empty Tab URLs and Titles if tabReload deactivated
-				tabsUrl.length  = 0
-				tabsTitle.length  = 0
-			}
-			else {
-				//Check if any change with before url on the tab (prevent proxy error message))
-				if ((tabs[tabToOpen].url != tabsUrl[tabToOpen] || tabs[tabToOpen].title != tabsTitle[tabToOpen]) && tabsUrl[tabToOpen] != null){
-					chrome.tabs.update(tabs[tabToOpen].id, { url: tabsUrl[tabToOpen] })
-				}else{
-					tabsUrl[tabToOpen] = tabs[tabToOpen].url
-					tabsTitle[tabToOpen] = tabs[tabToOpen].title
+				if (tabToOpen >= tabsNumber) {
+					tabToOpen = 0
 				}
-			}
-			if (switchTab)chrome.tabs.update(tabs[tabToOpen].id, {active: true})
-			
-			if(refreshCycleCalc <= 1 && refreshTab){
-				chrome.tabs.reload(tabs[tabToRefresh].id)
-			}
+				
+				// Refresh des tabs tous les refreshTabTimer (en miliseconde)
+				if(switchTab)refreshCycleCalc = refreshTabTimer/(cptRefreshCycle*switchTabTimer*tabsNumber)
+				else refreshCycleCalc = refreshTabTimer/(cptRefreshCycle*switchTabTimer)
+				
+				
+				if (!tabReload){
+					// Empty Tab URLs and Titles if tabReload deactivated
+					tabsUrl.length  = 0
+					tabsTitle.length  = 0
+				}
+				else {
+					//Check if any change with before url on the tab (prevent proxy error message))
+					if ((tabs[tabToOpen].url != tabsUrl[tabToOpen] || tabs[tabToOpen].title != tabsTitle[tabToOpen]) && tabsUrl[tabToOpen] != null){
+						chrome.tabs.update(tabs[tabToOpen].id, { url: tabsUrl[tabToOpen] })
+					}else{
+						tabsUrl[tabToOpen] = tabs[tabToOpen].url
+						tabsTitle[tabToOpen] = tabs[tabToOpen].title
+					}
+				}
+				if (switchTab)chrome.tabs.update(tabs[tabToOpen].id, {active: true})
+				
+				if(refreshCycleCalc <= 1 && refreshTab){
+					chrome.tabs.reload(tabs[tabToRefresh].id)
+				}
 
-			if((tabToRefresh == 0 || !switchTab)&& refreshCycleCalc <= 1) {
-				cptRefreshCycle=1
-				// Debug timer between reload part 2
-				lastdatetime = datetime
-			}
-			else if (tabToRefresh == 0 || !switchTab) {
-				cptRefreshCycle++
-			}
-		})
-	});
+				if((tabToRefresh == 0 || !switchTab)&& refreshCycleCalc <= 1) {
+					cptRefreshCycle=1
+					// Debug timer between reload part 2
+					lastdatetime = datetime
+				}
+				else if (tabToRefresh == 0 || !switchTab) {
+					cptRefreshCycle++
+				}
+			})
+		});
+	}
 }
 
 function movingInterval() {
@@ -113,7 +132,7 @@ function movingInterval() {
 	updateTimers();
 	// switch the tabs
 	switchRefreshTabs();
-    run = setInterval(movingInterval, switchTabTimer); // start the setInterval()
+	run = setInterval(movingInterval, switchTabTimer); // start the setInterval()
 }
 
 var run = setInterval(movingInterval, switchTabTimer); // start setInterval as "run"

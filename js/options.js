@@ -8,7 +8,7 @@ const saveOptions = () => {
     const csttabReload = document.getElementById('tabReload').checked;
 
     chrome.storage.local.set(
-      { switchTabTimer: cstSwitchTabTimer, switchTab: cstSwitchTab, refreshTabTimer: cstRefreshTabTimer, refreshTab: cstRefreshTab,fullScreen: cstfullScreen, tabReload: csttabReload},
+      { switchTabTimer: cstSwitchTabTimer, switchTab: cstSwitchTab, refreshTabTimer: cstRefreshTabTimer, refreshTab: cstRefreshTab,fullScreen: cstfullScreen, tabReload: csttabReload },
       () => {
         // Update status to let user know options were saved.
         const status = document.getElementById('status');
@@ -20,12 +20,12 @@ const saveOptions = () => {
     );
     
   };
-  
   // Restores select box and checkbox state using the preferences
   // stored in chrome.storage.
   const restoreOptions = () => {
     chrome.storage.local.get(
-      { switchTabTimer: '20', switchTab: true ,refreshTabTimer: '10', refreshTab: true ,fullScreen: false, tabReload: true},
+      // Default values all deactivated
+      { switchTabTimer: '20', switchTab: false ,refreshTabTimer: '10', refreshTab: false ,fullScreen: false, tabReload: false},
       (items) => {
         document.getElementById('switchTabTimer').value = items.switchTabTimer;
         document.getElementById('switchTab').checked = items.switchTab;
@@ -35,7 +35,17 @@ const saveOptions = () => {
         document.getElementById('tabReload').checked = items.tabReload;
       }
     );
+    chrome.runtime.sendMessage('stopSwitching'); 
   };
-  
+  // Send message to app.js to pause when config windows/popup loaded
+  const startPauseONconfig = () => {
+    if (document.visibilityState === "hidden") {
+      chrome.runtime.sendMessage('startSwitching');
+    } else{
+      chrome.runtime.sendMessage('stopSwitching');
+    }
+  };
+
   document.addEventListener('DOMContentLoaded', restoreOptions);
+  document.addEventListener('visibilitychange',startPauseONconfig);
   document.getElementById('save').addEventListener('click', saveOptions);
